@@ -1,0 +1,5 @@
+
+
+<template>
+    <FormPromocoes />
+</template>
