@@ -159,7 +159,7 @@ import ProductService from './service.js';
 export default {
     data() {
         return {
-            products: null,
+            products: [],
             productDialog: false,
             deleteProductDialog: false,
             deleteProductsDialog: false,
@@ -180,8 +180,7 @@ export default {
         this.initFilters();
     },
     mounted() {
-        console.log("testes");
-        this.productService.getProductsAlteracao().then(data => this.products = data);
+       // this.productService.getProductsAlteracao().then(data => this.products = data);
     },
     methods: {
         formatCurrency(value) {
