@@ -1,3 +1,4 @@
+
 <template>
     <div>
         <div class="card">
@@ -153,7 +154,7 @@
 
 <script>
 import { FilterMatchMode } from 'primevue/api';
-import ProductService from './service/ProductService';
+import ProductService from './service.js';
 
 export default {
     data() {
@@ -179,6 +180,7 @@ export default {
         this.initFilters();
     },
     mounted() {
+        console.log("testes");
         this.productService.getProductsAlteracao().then(data => this.products = data);
     },
     methods: {
@@ -309,3 +311,4 @@ export default {
 	}
 }
 </style>
+
