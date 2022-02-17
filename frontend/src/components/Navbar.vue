@@ -22,11 +22,20 @@
                             router.push({ path: '/' })
                         },
                     },
+                    
                     {
                         label:'Promoções',
                         icon:'pi pi-fw pi-shopping-bag',
                         command: () => {
                             router.push({ path: '/promocoes' })
+                        },
+                    },
+
+                    {
+                        label:'PEDRINHO LINDAO',
+                        icon:'pi pi-fw pi-shopping-bag',
+                        command: () => {
+                            router.push({ path: '/promocoesadmin' })
                         },
                     },
                 ]

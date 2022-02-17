@@ -12,6 +12,7 @@ const routes = [
     name: 'Home',
     component: Home
   },
+  
   {
     path: '/promocoes',
     name: 'Promocoes',
@@ -20,6 +21,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "promocoes" */ '../views/Promocoes.vue')
   },
+
   {
     path: '/promocoes/criar',
     name: 'CriaPromocoes',
@@ -27,7 +29,16 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "promocoes" */ '../views/CriaPromocoes.vue')
-  }
+  },
+
+  {
+    path: '/promocoesadmin',
+    name: 'PromocoesAdmin',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "promocoesadmin" */ '../views/PromocoesAdmin.vue')
+  },
 ]
 
 const router = createRouter({
