@@ -32,7 +32,7 @@
                     },
 
                     {
-                        label:'PEDRINHO LINDAO',
+                        label:'CRUD',
                         icon:'pi pi-fw pi-shopping-bag',
                         command: () => {
                             router.push({ path: '/promocoesadmin' })

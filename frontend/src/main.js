@@ -9,7 +9,6 @@ import Menubar from 'primevue/menubar';
 import DataView from 'primevue/dataview';
 import Rating from 'primevue/rating';
 import Dialog from 'primevue/dialog';
-
 import Toolbar from 'primevue/toolbar'
 import FileUpload from 'primevue/fileupload'
 import DataTable from 'primevue/datatable'
@@ -44,6 +43,7 @@ app.component('TextArea', Textarea);
 app.component('Dropdown', Dropdown);
 app.component('RadioButton', RadioButton);
 app.component('InputNumber', InputNumber);
+app.component('Rating', Rating);
 
 
 app.mount('#app');
