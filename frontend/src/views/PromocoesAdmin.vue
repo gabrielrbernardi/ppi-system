@@ -1,3 +1,5 @@
+
+
 <template>
     <div>
         <div class="card">
@@ -14,7 +16,7 @@
                 -->
             </Toolbar>
 
-            <DataTable ref="dt" :value="products" dataKey="id" 
+            <DataTable ref="dt" :value="products" v-model:selection="selectedProducts" dataKey="id" 
                 :paginator="true" :rows="10" :filters="filters"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[5,10,25]"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products" responsiveLayout="scroll">
@@ -61,7 +63,7 @@
             </DataTable>
         </div>
 
-        <Dialog :style="{width: '450px'}" header="Product Details" :modal="true" class="p-fluid">
+        <Dialog v-model:visible="productDialog" :style="{width: '450px'}" header="Product Details" :modal="true" class="p-fluid">
             <img src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" :alt="product.image" class="product-image" v-if="product.image" />
             <div class="field">
                 <label for="name">Name</label>
@@ -128,7 +130,7 @@
             </template>
         </Dialog>
 
-        <Dialog :style="{width: '450px'}" header="Confirm" :modal="true">
+        <Dialog v-model:visible="deleteProductDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
             <div class="confirmation-content">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
                 <span v-if="product">Are you sure you want to delete <b>{{product.name}}</b>?</span>
@@ -138,8 +140,8 @@
                 <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteProduct" />
             </template>
         </Dialog>
-    
-        <Dialog :style="{width: '450px'}" header="Confirm" :modal="true">
+
+        <Dialog v-model:visible="deleteProductsDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
             <div class="confirmation-content">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
                 <span v-if="product">Are you sure you want to delete the selected products?</span>
@@ -149,12 +151,10 @@
                 <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteSelectedProducts" />
             </template>
         </Dialog>
-
 	</div>
 </template>
 
 <script>
-
 import { FilterMatchMode } from 'primevue/api';
 import ProductService from './service.js';
 
@@ -312,3 +312,4 @@ export default {
 	}
 }
 </style>
+
