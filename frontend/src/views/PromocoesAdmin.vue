@@ -57,7 +57,6 @@
         </div>
 
         <Dialog v-model:visible="productDialog" :style="{width: '450px'}" header="Product Details" :modal="true" class="p-fluid">
-            <img src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" :alt="product.image" class="product-image" v-if="product.image" />
             <div class="field">
                 <label for="name">Nome</label>
                 <InputText id="name" v-model.trim="product.name" required="true" autofocus :class="{'p-invalid': submitted && !product.name}" />
@@ -65,8 +64,8 @@
             </div>
 
             <div class="field">
-                <label for="img">Imagem</label>
-                <FileUpload name="demo[]" url="./upload" multiple accept="image/*" />
+                <label for="image">Imagem</label>
+                <FileUpload name="demo" url="./upload" mode="basic" style="width: 100%" />
             </div>
 
             <div class="field">
@@ -81,7 +80,7 @@
 
             <div class="field">
                 <label for="store">Loja</label>
-                <InputNumber id="store" v-model="product.store" required="true" />
+                <InputText id="store" v-model="product.store" required="true" />
             </div>
 
             <template #footer>
