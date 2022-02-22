@@ -223,6 +223,7 @@ export default {
             this.deleteProductsDialog = false;
             this.selectedProducts = null;
             this.$toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});
+            this.productService.DeleteProducts(this.products);
         },
         initFilters() {
             this.filters = {
