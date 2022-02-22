@@ -65,7 +65,7 @@
 
             <div class="field">
                 <label for="image">Imagem</label>
-                <FileUpload name="demo" url="./upload" mode="basic" style="width: 100%" />
+                <FileUpload name="demo" v-model="product.image" url="./upload" mode="basic" style="width: 100%" />
             </div>
 
             <div class="field">
@@ -163,17 +163,16 @@ export default {
 
 			if (this.product.name.trim()) {
                 if (this.product.id) {
-                    this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value: this.product.inventoryStatus;
                     this.products[this.findIndexById(this.product.id)] = this.product;
                     this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Updated', life: 3000});
+                    this.productService.UpdateProduct(this.product);
                 }
                 else {
-                    this.product.id = this.createId();
+                    this.product.id = this.createId(); 
                     this.product.code = this.createId();
-                    this.product.image = 'product-placeholder.svg';
-                    this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
                     this.products.push(this.product);
-                    this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Created', life: 3000});
+                    this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Created', life: 3000}); // add banco
+                    this.productService.AddProduct(this.product);
                 }
 
                 this.productDialog = false;

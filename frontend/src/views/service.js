@@ -9,4 +9,16 @@ export default class ProductService {
 		return fetch('demo/product.json').then(res => res.json()).then(d => d.data); 
 
     }
+
+	async AddProduct() {
+		// Add do axios futuramente
+		//return fetch('demo/product.json').then(res => res.json()).then(d => d.data); 
+
+    }
+
+	async UpdateProduct() {
+		// Update do axios futuramente
+		//return fetch('demo/product.json').then(res => res.json()).then(d => d.data); 
+
+    }
 }
