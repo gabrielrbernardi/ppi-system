@@ -32,8 +32,8 @@
                     },
 
                     {
-                        label:'CRUD',
-                        icon:'pi pi-fw pi-shopping-bag',
+                        label:'Gerenciar Promoções',
+                        icon:'pi pi-fw pi-cog',
                         command: () => {
                             router.push({ path: '/promocoesadmin' })
                         },
