@@ -1,0 +1,36 @@
+package mainPackage;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@org.springframework.stereotype.Controller
+@RequestMapping(path="/")
+public class ProdutoController {
+	@Autowired
+	private ProductRepository productRepository;
+	
+	@GetMapping(path="/")
+	public @ResponseBody String status() {
+		return "ola";
+	}
+	
+	@PostMapping(value="/add", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public FormatReturnMessage addProduct (@Valid @RequestBody ProdutoDomain prod) {
+		ProdutoDomain p = new ProdutoDomain();
+		p.setCodProduto(prod.getCodProduto());
+		p.setNomeProduto(prod.getNomeProduto());
+		productRepository.save(p);
+			
+		return new FormatReturnMessage("ALOU");
+	}
+}
