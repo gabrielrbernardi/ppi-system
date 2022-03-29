@@ -2,8 +2,10 @@ package mainPackage;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,32 +25,52 @@ public class ProdutoController {
 	
 	@GetMapping(path="/status")
 	public @ResponseBody FormatReturnMessage status() {
-		return new FormatReturnMessage("true", HttpStatus.OK);
+		return new FormatReturnMessage("true");
 	}
 	
 	@PostMapping(value="/")
 	@ResponseBody
-	public ResponseEntity<ProdutoDomain> addProduct (@Valid @RequestBody ProdutoDomain prod) {
-		ProdutoDomain pd = new ProdutoDomain();
-		pd.setCodProduto(prod.getCodProduto());
-		pd.setNomeProduto(prod.getNomeProduto());
-		productRepository.save(pd);
+	public ResponseEntity<?> addProduct (@Valid @RequestBody ProdutoDomain prod, Errors err){
+		try {
+			if(err.hasErrors()) {
+				throw new Exception("Erro na passagem de parametro");
+			}
 			
-		return new ResponseEntity<>(pd, HttpStatus.OK);
+			if(prod.getCodProduto().isBlank() || prod.getNomeProduto().isBlank() || prod.getPrecoProduto() <= 0.0 || prod.getQuantidadeProduto() < 0) {
+				throw new Exception("Campos Invalidos");
+			}
+			ProdutoDomain pd = new ProdutoDomain();
+			pd.setCodProduto(prod.getCodProduto());
+			pd.setNomeProduto(prod.getNomeProduto());
+			pd.setPrecoProduto(prod.getPrecoProduto());
+			pd.setQuantidadeProduto(prod.getQuantidadeProduto());
+			productRepository.save(pd);
+			
+			return ResponseEntity.status(HttpStatus.OK).body(pd);		
+		}
+		catch (Exception e) {
+			FormatErrorMessage errorMessage = new FormatErrorMessage(e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+		}
 	}
 	
 	@GetMapping(value="/{id}")
 	@ResponseBody
-	public ResponseEntity<ProdutoDomain> getSpecificProduct(@PathVariable Long id){
+	public ResponseEntity<?> getSpecificProduct(@PathVariable Long id){
 		try {
-			ProdutoDomain pd = productRepository.findById(id).orElseThrow(() -> new Exception("Produto nao encontrado"));
+			ProdutoDomain pd = productRepository.findById(id).orElseThrow(() -> new NotFoundException());
 			return new ResponseEntity<>(pd, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}catch (NotFoundException e) {
+			FormatErrorMessage errorMessage = new FormatErrorMessage("Registro nao encontrado");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+		}
+		catch (Exception e) {
+			FormatErrorMessage errorMessage = new FormatErrorMessage(e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
 		}
 	}
 	
-	@GetMapping(value="/getAll")
+	@GetMapping(value="/")
 	@ResponseBody
 	public Iterable<ProdutoDomain> getAllProducts() {
 		return productRepository.findAll();
@@ -56,27 +78,39 @@ public class ProdutoController {
 	
 	@PutMapping(value="/{id}")
 	@ResponseBody
-	public ResponseEntity<String> updateProduct(@PathVariable Long id, @RequestBody ProdutoDomain product) throws Exception{
+	public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody ProdutoDomain product) throws Exception{
 		try {
-			ProdutoDomain pd = productRepository.findById(id).orElseThrow(() -> new Exception("Produto nao encontrado")); //retornara o objeto se for encontrado ou vazio, caso contrario
+			ProdutoDomain pd = productRepository.findById(id).orElseThrow(() -> new NotFoundException()); //retornara o objeto se for encontrado ou vazio, caso contrario
 			pd.setNomeProduto(product.getNomeProduto());
 			pd.setCodProduto(product.getCodProduto());
+			pd.setPrecoProduto(product.getPrecoProduto());
+			pd.setQuantidadeProduto(product.getQuantidadeProduto());
 			
 			productRepository.save(pd);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>("Produto nao encontrado", HttpStatus.NOT_FOUND);
+			return ResponseEntity.status(HttpStatus.OK).body(pd);	
+		}catch (NotFoundException e) {
+			FormatErrorMessage errorMessage = new FormatErrorMessage("Registro nao encontrado");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+		} 
+		catch (Exception e) {
+			FormatErrorMessage errorMessage = new FormatErrorMessage(e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
 		}
 	}
 	
 	@DeleteMapping(value="/{id}")
 	@ResponseBody
-	public ResponseEntity<String> deleteProduct(@PathVariable Long id){
+	public ResponseEntity<?> deleteProduct(@PathVariable Long id){
 		try {
+			productRepository.findById(id).orElseThrow(() -> new NotFoundException());
+			
 			productRepository.deleteById(id);
 			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (NotFoundException e) {
+			FormatErrorMessage errorMessage = new FormatErrorMessage("Registro nao encontrado");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
 		}catch(Exception e) {
-			return new ResponseEntity<>("Erro na execucao", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("Erro na execucao", HttpStatus.BAD_REQUEST);
 		}
 	}
 }
