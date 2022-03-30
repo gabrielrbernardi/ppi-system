@@ -3,7 +3,7 @@
     <div class="card">
         <DataView :value="products" :layout="layout" :paginator="true" :rows="9" 
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" 
-            currentPageReportTemplate="Mostrando {first} de {last} de um total de {totalRecords} produtos" :rowsPerPageOptions="[5,9,27]">
+            currentPageReportTemplate="Mostrando {first} de {last} de um total de {totalRecords} produtos" :rowsPerPageOptions="[3,9,27]">
 			<template #header>
                 <div class="grid grid-nogutter">
                     <div class="col-6" style="text-align: left">
