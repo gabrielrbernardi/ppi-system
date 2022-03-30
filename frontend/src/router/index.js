@@ -10,26 +10,27 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    redirect: '/promocoes',
+    // redirect: '/promocoes',
     component: Home
   },
   
+  {
+    path: '/promocoesadmin',
+    name: 'Promocoes admin',
+    redirect: '/promocoes',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    // component: () => import(/* webpackChunkName: "promocoes" */ '../views/Promocoes.vue')
+  },
+
   {
     path: '/promocoes',
     name: 'Promocoes',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "promocoes" */ '../views/Promocoes.vue')
-  },
-
-  {
-    path: '/promocoesadmin',
-    name: 'PromocoesAdmin',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "promocoesadmin" */ '../views/PromocoesAdmin.vue')
+    component: () => import(/* webpackChunkName: "promocoesadmin" */ '../views/Promocoes.vue')
   },
 ]
 

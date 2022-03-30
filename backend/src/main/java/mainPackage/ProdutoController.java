@@ -6,6 +6,7 @@ import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @org.springframework.stereotype.Controller
 @RequestMapping(path="/")
+@CrossOrigin
 public class ProdutoController {
 	@Autowired
 	private ProductRepository productRepository;
@@ -44,6 +46,13 @@ public class ProdutoController {
 			pd.setNomeProduto(prod.getNomeProduto());
 			pd.setPrecoProduto(prod.getPrecoProduto());
 			pd.setQuantidadeProduto(prod.getQuantidadeProduto());
+			pd.setDescricaoProduto(prod.getDescricaoProduto());
+			
+			if(prod.getQuantidadeProduto() == 0) {
+				pd.setStatusProduto("OUTOFSTOCK");
+			}else {
+				pd.setStatusProduto("INSTOCK");
+			}
 			productRepository.save(pd);
 			
 			return ResponseEntity.status(HttpStatus.OK).body(pd);		
@@ -78,13 +87,25 @@ public class ProdutoController {
 	
 	@PutMapping(value="/{id}")
 	@ResponseBody
-	public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody ProdutoDomain product) throws Exception{
+	public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody ProdutoDomain prod) throws Exception{
 		try {
 			ProdutoDomain pd = productRepository.findById(id).orElseThrow(() -> new NotFoundException()); //retornara o objeto se for encontrado ou vazio, caso contrario
-			pd.setNomeProduto(product.getNomeProduto());
-			pd.setCodProduto(product.getCodProduto());
-			pd.setPrecoProduto(product.getPrecoProduto());
-			pd.setQuantidadeProduto(product.getQuantidadeProduto());
+
+			if(prod.getCodProduto().isBlank() || prod.getNomeProduto().isBlank() || prod.getPrecoProduto() <= 0.0 || prod.getQuantidadeProduto() < 0) {
+				throw new Exception("Campos Invalidos");
+			}
+			
+			pd.setNomeProduto(prod.getNomeProduto());
+			pd.setCodProduto(prod.getCodProduto());
+			pd.setPrecoProduto(prod.getPrecoProduto());
+			pd.setQuantidadeProduto(prod.getQuantidadeProduto());
+			pd.setDescricaoProduto(prod.getDescricaoProduto());
+			
+			if(prod.getQuantidadeProduto() == 0) {
+				pd.setStatusProduto("OUTOFSTOCK");
+			}else {
+				pd.setStatusProduto("INSTOCK");
+			}
 			
 			productRepository.save(pd);
 			return ResponseEntity.status(HttpStatus.OK).body(pd);	
